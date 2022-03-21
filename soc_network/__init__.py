@@ -45,7 +45,7 @@ def token_required(f):
     return decorated
 
 
-@application.post('/register')
+@application.post('/api/register')
 def register():
     data = request.args
     email, password = data.get('email'), data.get('password')
@@ -60,7 +60,7 @@ def register():
     return jsonify({'message':'Successfully registered'}), 201
 
 
-@application.post('/login')
+@application.post('/api/login')
 def login():
     auth = request.args
     resp = UserService().login(auth.get('email'), auth.get('password'))
@@ -69,7 +69,7 @@ def login():
     return make_response(jsonify({'token': resp}), 201)
 
 
-@application.post('/create_post')
+@application.post('/api/create_post')
 @token_required
 def create_post(user):
     args = request.args
@@ -83,7 +83,7 @@ def create_post(user):
     return jsonify({'message': 'Post created successfully'}), 200
 
 
-@application.post('/like_post')
+@application.post('/api/like_post')
 @token_required
 def like_post(user):
     args = request.args
@@ -94,7 +94,7 @@ def like_post(user):
     return jsonify({'message': 'Successfully liked a post'}), 200
 
 
-@application.post('/unlike_post')
+@application.post('/api/unlike_post')
 @token_required
 def unlike_post(user):
     args = request.args
@@ -105,7 +105,7 @@ def unlike_post(user):
     return jsonify({'message': 'Successfully unliked a post'}), 200
 
 
-@application.get('/like_stats')
+@application.get('/api/like_stats')
 @token_required
 def like_stats(user):
     args = request.args
@@ -117,7 +117,7 @@ def like_stats(user):
     return jsonify({'error': 'Provide date from and date to to get the analytics'}), 403
 
 
-@application.get('/user_stats')
+@application.get('/api/user_stats')
 @token_required
 def user_stats(user):
     args = request.args
