@@ -1,0 +1,6 @@
+soc_network/.env
+.idea/
+soc_network/__pycache__/
+soc_network/models/__pycache__/
+test.py
+soc_network/services/__pycache__/
