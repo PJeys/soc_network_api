@@ -32,18 +32,19 @@ class UserService:
         return False
 
     @staticmethod
-    def is_exist(email):
+    def is_exist(email: str):
         u = User.query.filter(User.email == email).first()
         if u:
             return True
         return False
 
-    def create_post(self, public_id, text, media=None):
+    @staticmethod
+    def create_post(public_id: str, text: int, media: int=None):
         user = User.query.filter(User.public_id == public_id).first()
         PostService().create_post(author_id=user.id, text=text, media=media)
 
     @staticmethod
-    def check_token(token) -> Union[User, bool]:
+    def check_token(token: str) -> Union[User, bool]:
         load_dotenv()
         key = getenv('SECRET_KEY')
         decoded_token = jwt.decode(token, key, algorithms=['HS256'])['public_id']
@@ -62,25 +63,28 @@ class UserService:
         }, getenv('SECRET_KEY'))
         return token
 
-    def like_post(self, pub_id, post_id):
+    @staticmethod
+    def like_post(pub_id: str, post_id: int):
         user = User.query.filter(User.public_id == pub_id).first()
         if user:
             p = PostService().like_post(post_id, user_id=user.id)
             return p
         return False
 
-    def unlike_post(self, pub_id, post_id):
+    @staticmethod
+    def unlike_post(pub_id: str, post_id: int):
         user = User.query.filter(User.public_id == pub_id).first()
         if user:
             p = PostService().unlike_post(post_id, user_id=user.id)
             return p
         return False
 
-    def get_user_id_by_token(self, token):
+    def get_user_id_by_token(self, token: str):
         u = self.check_token(token)
         if u is not False:
             return u.id
 
-    def get_user_id_by_pubid(self, pub_id):
+    @staticmethod
+    def get_user_id_by_pubid(pub_id: str):
         u = User.query.filter(User.public_id == pub_id).first()
         return u.id

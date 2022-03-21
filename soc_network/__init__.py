@@ -1,4 +1,3 @@
-import jwt
 from flask import Flask, jsonify, request, make_response
 from soc_network.config import Config
 from soc_network.models import init_DB
@@ -109,10 +108,11 @@ def unlike_post(user):
 @token_required
 def like_stats(user):
     args = request.args
-    date_from, date_to = datetime.strptime(args.get('date_from'), '%Y-%m-%d'), \
-                         datetime.strptime(args.get('date_to'), '%Y-%m-%d')
+    date_from, date_to = args.get('date_from'), args.get('date_to')
     if date_to and date_from:
-        likes = PostService().get_like_stats(date_from, date_to)
+        date_from_dt = datetime.strptime(date_from, '%Y-%m-%d')
+        date_to_dt = datetime.strptime(date_to, '%Y-%m-%d')
+        likes = PostService().get_like_stats(date_from_dt, date_to_dt)
         return jsonify({'like_number': likes}), 200
     return jsonify({'error': 'Provide date from and date to to get the analytics'}), 403
 
